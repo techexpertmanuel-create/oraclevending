@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Manager Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sign in / set PIN -->
+  <div class="auth-wrap" id="auth">
+    <div class="panel auth-card">
+      <h1 id="authTitle">Manager sign in</h1>
+      <p id="authText">Enter your PIN to open the dashboard.</p>
+      <form id="authForm">
+        <div class="field">
+          <label for="pin" id="pinLabel">PIN</label>
+          <input id="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12">
+        </div>
+        <div class="field hidden" id="pin2Field">
+          <label for="pin2">Repeat PIN</label>
+          <input id="pin2" type="password" inputmode="numeric" maxlength="12">
+        </div>
+        <div class="err" id="authErr"></div>
+        <button class="btn" style="width:100%" type="submit" id="authBtn">Open dashboard</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="app" class="hidden">
+    <div class="admin-bar">
+      <div class="wrap">
+        <div class="brand"><span class="mark">D</span><span id="adminShop">Manager</span></div>
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-tab="orders" aria-selected="true">Orders</button>
+          <button class="tab" role="tab" data-tab="prices" aria-selected="false">Prices</button>
+          <button class="tab" role="tab" data-tab="settings" aria-selected="false">Settings</button>
+        </div>
+        <button class="btn ghost sm" id="logout">Sign out</button>
+      </div>
+    </div>
+
+    <main class="wrap page">
+      <div class="banner warn hidden" id="pubBanner">
+        You have price or settings changes that customers cannot see yet.
+        <button class="btn sm" id="pubNow" style="margin-left:8px">Publish changes</button>
+      </div>
+
+      <!-- ORDERS -->
+      <section id="tab-orders">
+        <div class="stats">
+          <div class="stat"><span>Orders today</span><strong id="stToday">0</strong></div>
+          <div class="stat"><span>Waiting for payment</span><strong id="stPending">0</strong></div>
+          <div class="stat"><span>Paid today</span><strong id="stRevToday">GHS 0.00</strong></div>
+          <div class="stat"><span>Paid, all time</span><strong id="stRevAll">GHS 0.00</strong></div>
+        </div>
+
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Search name, number or order ID">
+          <select id="filter" aria-label="Filter by status">
+            <option value="">All statuses</option>
+            <option>Pending</option><option>Paid</option><option>Delivered</option><option>Cancelled</option>
+          </select>
+          <span class="spacer"></span>
+          <button class="btn sm" id="importBtn">Import from WhatsApp</button>
+          <button class="btn ghost sm" id="csvBtn">Download CSV</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Order ID</th><th>Customer</th><th>Send data to</th><th>Bundle</th><th>Amount</th><th>Status</th><th></th></tr>
+            </thead>
+            <tbody id="ordersBody"></tbody>
+          </table>
+        </div>
+        <div class="empty hidden" id="ordersEmpty" style="margin-top:14px">
+          No orders yet. When a customer sends an order on WhatsApp, copy the message and choose Import from WhatsApp.
+        </div>
+      </section>
+
+      <!-- PRICES -->
+      <section id="tab-prices" class="hidden">
+        <div class="stats" style="grid-template-columns:1fr;margin-bottom:12px">
+          <div class="stat"><span>Edit a price and it saves on this device. Choose Publish changes to update the customer page.</span></div>
+        </div>
+        <div class="toolbar">
+          <button class="btn sm" id="addBundle">Add bundle</button>
+          <span class="spacer"></span>
+          <button class="btn sm" id="publishBtn">Publish changes</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Network</th><th>Bundle</th><th>Price (GHS)</th><th>Validity</th><th>On sale</th><th></th></tr>
+            </thead>
+            <tbody id="pricesBody"></tbody>
+          </table>
+        </div>
+        <datalist id="netList"><option value="MTN"><option value="Telecel"><option value="AT"></datalist>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="tab-settings" class="hidden">
+        <div class="panel" style="margin-top:22px">
+          <h2 class="step-title">Shop details</h2>
+          <div class="settings-grid">
+            <div class="field"><label for="sShop">Shop name</label><input id="sShop"></div>
+            <div class="field"><label for="sWa">WhatsApp number for orders</label><input id="sWa" inputmode="numeric" placeholder="0241234567"><div class="hint">Customers' orders open a chat with this number.</div></div>
+            <div class="field"><label for="sMomo">Mobile money number</label><input id="sMomo" inputmode="numeric"></div>
+            <div class="field"><label for="sMomoName">Mobile money account name</label><input id="sMomoName"></div>
+            <div class="field"><label for="sMomoNet">Mobile money network</label><input id="sMomoNet" placeholder="MTN MoMo"></div>
+            <div class="field"><label for="sNotice">Notice on the shop page (optional)</label><input id="sNotice"></div>
+          </div>
+          <button class="btn" id="saveSettings">Save settings</button>
+        </div>
+
+        <div class="panel" style="margin-top:18px">
+          <h2 class="step-title">Change PIN</h2>
+          <div class="settings-grid">
+            <div class="field"><label for="newPin">New PIN (4 to 12 digits)</label><input id="newPin" type="password" inputmode="numeric" maxlength="12"></div>
+          </div>
+          <div class="err" id="pinErr"></div>
+          <button class="btn ghost" id="savePin">Change PIN</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Import modal -->
+  <div class="modal-back hidden" id="importModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="impTitle">
+      <h2 id="impTitle">Import orders from WhatsApp</h2>
+      <p class="muted" style="margin-top:0">Paste one or more order messages. Orders already imported are skipped.</p>
+      <textarea id="importText" style="min-height:180px" placeholder="Paste the WhatsApp message here"></textarea>
+      <div class="err" id="importErr"></div>
+      <div class="row">
+        <button class="btn ghost" id="importCancel">Cancel</button>
+        <button class="btn" id="importGo">Import orders</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="config.js"></script>
+  <script src="common.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

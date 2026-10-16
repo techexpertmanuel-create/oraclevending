@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buy Data Bundles</title>
+  <meta name="description" content="Order MTN, Telecel and AT data bundles and pay by mobile money.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap">
+      <div class="brand"><span class="mark">D</span><span id="shopName">Data Shop</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Data bundles, sent to any number.</h1>
+      <p>Pick a bundle, send your order on WhatsApp, pay by mobile money. We load the data once your payment is confirmed.</p>
+      <div class="notice hidden" id="notice"></div>
+    </section>
+
+    <div class="layout">
+      <section aria-labelledby="pick-title">
+        <h2 class="step-title" id="pick-title">Choose a network and bundle</h2>
+        <div class="nets" id="nets" role="group" aria-label="Network"></div>
+        <div class="grid" id="grid"></div>
+      </section>
+
+      <aside class="panel order-panel" id="orderPanel" aria-live="polite">
+        <!-- Order form -->
+        <div id="formView">
+          <h2 class="step-title">Your order</h2>
+          <div class="summary" id="summary">
+            <div class="what"><span class="muted">No bundle selected</span><small>Tap a bundle to start</small></div>
+          </div>
+          <form id="orderForm" novalidate>
+            <div class="field">
+              <label for="name">Your name</label>
+              <input id="name" type="text" autocomplete="name" placeholder="e.g. Ama Mensah" maxlength="60">
+            </div>
+            <div class="field">
+              <label for="phone">Number to receive the data</label>
+              <input id="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="0241234567" maxlength="14">
+              <div class="hint">Make sure it is on the same network as the bundle you picked.</div>
+            </div>
+            <div class="field">
+              <label for="note">Note (optional)</label>
+              <textarea id="note" maxlength="200" placeholder="Anything we should know?"></textarea>
+            </div>
+            <div class="err" id="formErr"></div>
+            <button type="submit" class="btn wa">Send order on WhatsApp</button>
+          </form>
+          <ol class="steps">
+            <li>Your order opens in WhatsApp. Press send.</li>
+            <li>Pay with mobile money using the details we show next.</li>
+            <li>Send your payment screenshot in the same chat.</li>
+          </ol>
+        </div>
+
+        <!-- After order -->
+        <div id="doneView" class="hidden">
+          <h2 class="step-title">Order ready to send</h2>
+          <p class="muted" style="margin-top:0">Order number <strong id="doneId"></strong></p>
+          <div class="pay-box">
+            <p>Pay <strong class="big" id="doneAmt"></strong> to:</p>
+            <p><strong id="payNumber"></strong></p>
+            <p class="muted" id="payName"></p>
+            <p>Use <strong id="payRef"></strong> as the reference.</p>
+          </div>
+          <p class="hint" style="margin-bottom:14px">If WhatsApp did not open, use the button below. Then send your payment screenshot in the chat.</p>
+          <a class="btn wa" id="waAgain" target="_blank" rel="noopener">Open WhatsApp</a>
+          <button class="btn ghost" id="newOrder" style="width:100%;margin-top:10px">Place another order</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="foot">Prices are in Ghana cedis (GHS).</footer>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="config.js"></script>
+  <script src="common.js"></script>
+  <script src="shop.js"></script>
+</body>
+</html>
